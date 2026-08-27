@@ -1,0 +1,40 @@
+Package: LDIAG
+Type: Package
+Title: LD-Aware Integration of Single-Cell Chromatin Accessibility and GWAS
+Version: 0.1.0
+Authors@R: c(
+    person("Lingxuan", "Zhu", role = c("aut", "cre"),
+           email = "zhulx@tamu.edu",
+           comment = c(ORCID = "0009-0005-0502-4911")),
+    person("Yuchao", "Jiang", role = c("aut", "ths"),
+           email = "yuchaojiang@tamu.edu")
+  )
+Description: A configurable workflow for harmonizing genome-wide association
+    study summary statistics with single-cell or single-nucleus ATAC-seq data.
+    The package constructs SNP- and peak-level accessibility features, models
+    local linkage disequilibrium at both resolutions, fits one-sided
+    LD-adjusted association models, and combines component tests with the
+    aggregated Cauchy association test.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Depends: R (>= 4.3.0)
+Imports:
+    Matrix,
+    methods,
+    yaml
+Suggests:
+    BiocParallel,
+    GenomeInfoDb,
+    GenomicRanges,
+    IRanges,
+    Rsamtools,
+    Seurat,
+    Signac,
+    SNPRelate,
+    S4Vectors,
+    data.table,
+    ggplot2,
+    igraph,
+    presto,
+    rtracklayer
+RoxygenNote: 7.3.2

@@ -1,0 +1,25 @@
+name: ldiag
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - r-base>=4.3
+  - r-matrix
+  - r-yaml
+  - r-data.table
+  - r-ggplot2
+  - r-igraph
+  - r-seurat
+  - r-signac
+  - r-biocmanager
+  - r-remotes
+  - r-knitr
+  - r-rmarkdown
+  - bioconductor-biocparallel
+  - bioconductor-genomeinfodb
+  - bioconductor-genomicranges
+  - bioconductor-iranges
+  - bioconductor-rsamtools
+  - bioconductor-snprelate
+  - bioconductor-sparsematrixstats
+  - bioconductor-rtracklayer

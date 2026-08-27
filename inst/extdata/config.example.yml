@@ -1,0 +1,127 @@
+project:
+  name: fetal chromatin accessibility
+  output_dir: results
+
+parameters:
+  seed: 1000
+  workers: 4
+
+genome:
+  # All GWAS, SNP, peak, LD, and model outputs use this build.
+  target: hg19
+  # Directional UCSC chain files are required only when configured builds differ.
+  chains:
+    hg19_to_hg38: null
+    hg38_to_hg19: null
+  unmapped_action: drop
+  multimapping_action: drop
+  duplicate_action: drop
+
+atac:
+  input: data/atac.with_fragments.rds
+  assay: ATAC
+  genome: hg19
+  tissue_column: tissue
+  group_column: tissue_cell_type
+  attach_fragments: false
+  compute_qc_metrics: false
+  recompute_embedding: false
+  qc:
+    tss_min: 2.5
+    frip_min: 0.3
+    count_quantile_min: 0.01
+    blacklist_max: 0.02
+    nucleosome_max: 4
+    min_cells_per_group: 50
+    peak_width_min: 100
+    peak_width_max: 1000
+    peak_min_total_counts: 1
+    peak_min_cells: 1
+    peak_autosomes_only: true
+    peak_remove_blacklist: true
+
+gwas:
+  # Default input build; each named GWAS may override it below.
+  genome: hg19
+  # Optional column whose hg19/GRCh37 or hg38/GRCh38 values are checked.
+  genome_column: null
+  maf_min: 0.05
+  genotype_format: auto
+  genotype_orientation: auto
+  genotype_ploidy: 2
+  genotype_missing_values: [-9]
+  reference_missing_rate_max: 0.01
+  remove_ambiguous: true
+  ld_prune: true
+  ld_prune_tool: snprelate
+  ld_prune_noninteger: error
+  ld_method: composite
+  ld_threshold: 0.8
+  ld_window_bp: 500000
+  ld_slide_max_n: null
+  ld_prune_maf_min: 0.005
+  ld_remove_monomorphic: true
+  ld_start_pos: random.f500
+  ld_num_threads: 1
+  columns:
+    rsid: rsid
+    chr: chr
+    pos: pos
+    a1: A1
+    a2: A2
+    maf: MAF
+    p: P
+    beta: Beta
+    se: SE
+  traits:
+    HDL:
+      summary: data/gwas/HDL_aligned.rds
+      genome: hg19
+      genotype: data/reference_genotype.rds
+    LDL:
+      summary: data/gwas/LDL_aligned.rds
+      genotype: data/reference_genotype.rds
+      # Any GWAS QC, genotype, or LD-pruning setting above can be overridden here.
+      # A user's .csv/.tsv genotype matrix can be supplied here; set
+      # genotype_variant_id_column when variant IDs are stored in a table column.
+
+accessibility:
+  chunks: 20
+
+ld:
+  window_bp: 5000000
+  ridge: 0.01
+  eigen_tolerance: 1.0e-8
+  # Number of focal variants per BLAS correlation block. This affects speed,
+  # not the LD window or statistical definition.
+  correlation_block_size: 256
+  max_snps_for_chr_ld: 15000
+
+wrs:
+  truncation_quantiles: [0.02, 0.98]
+  balanced:
+    enabled: false
+    cells_per_side: [500, 1000]
+    repeats: 30
+    auc_cutoff: 0.55
+    stability_frequency_cutoff: 0.8
+    top_n: 100
+
+model:
+  groupings: [tissue_cell_type, tissue]
+  require_all_components: true
+
+plots:
+  formats: [png, pdf]
+  dpi: 300
+  base_size: 11
+  max_umap_cells: 100000
+  count_bin_max: 4
+  ld_heatmap_max_features: 250
+  wrs_histogram_bins: 50
+  top_features_per_group: 3
+  pvalue_cap: 12
+  # Optional TSV/RDS/RData created by the external S-LDSC workflow.
+  sldsc_summary: null
+  # Manuscript runs should normally set this to true.
+  fail_on_error: false

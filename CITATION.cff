@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use LDIAG, please cite this software and the associated article."
+title: "LDIAG: LD-aware integration of single-cell chromatin accessibility and GWAS"
+type: software
+version: 0.1.0
+date-released: 2026-08-18
+authors:
+  - given-names: Lingxuan
+    family-names: Zhu
+    orcid: "https://orcid.org/0009-0005-0502-4911"
+  - given-names: Yuchao
+    family-names: Jiang
+license: MIT
